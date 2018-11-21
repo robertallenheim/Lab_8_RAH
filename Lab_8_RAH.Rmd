@@ -8,3 +8,60 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+#1 Load the tidyverse
+
+```{r include= FALSE}
+
+library(tidyverse)
+
+```
+
+#2 Read in the salmon dataset
+
+```{r message=FALSE}
+
+salmon <- read_csv("SalmonExports.csv")
+
+```
+
+#3 Exploratory Scatterplot 
+
+```{r}
+
+salmon_plot <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+  geom_point()
+
+salmon_plot
+  
+# Describing the relationship between year and fresh salmon imports using linear regression makes sense becaue the data appears linear 
+
+```
+
+#4 Perform a linear regression
+
+```{r}
+
+salmon_model <- lm(salmon_fresh ~ year, data = salmon)
+
+salmon_model
+
+summary(salmon_model)
+
+# recall... y= B0 + B1x + E
+
+# Model equation: Salmon Imports(tons) = - 14982940 + 7550(year)
+
+# The slope means that each year, salmon imports increase by 7550 pounds on average.
+# The y-intercept means that at year 0, salmon imports are expected to be -14982940 pounds. This y-intercept is concerning because imports cannot be a negative number. This model should not be used to extrapolate for past values of salmon imports.
+
+```
+
+# Model diagnostics
+
+```{r}
+
+
+
+```
+
