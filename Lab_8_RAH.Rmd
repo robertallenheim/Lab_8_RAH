@@ -42,13 +42,13 @@ salmon_plot
 
 ```{r}
 
+# Perform linear regression to describe the trend in total volume of fresh salmon imported to the U.S.from 1990 - 2017.
+
 salmon_model <- lm(salmon_fresh ~ year, data = salmon)
 
 salmon_model
 
-summary(salmon_model)
-
-# recall... y= B0 + B1x + E
+# Determine the model equaiton: recall... y= B0 + B1x + E
 
 # Model equation: Salmon Imports(tons) = - 14982940 + 7550(year)
 
@@ -57,7 +57,51 @@ summary(salmon_model)
 
 ```
 
-# Model diagnostics
+#6 Model diagnostics
+
+Use plot(model_name) to view model diagnostics in the ‘Plots’ tab (press Enter in the Console to contine to subsequent diagnostic plots). Explore the diagnostic plots to answer the following:
+• Do residuals appear normally distributed?
+• Any concerns about heteroscedasticity or outliers?
+To view all four diagnostic plots at once (and have them appear in your knitted document), you can use the
+following:
+par(mfrow = c(2,2))
+plot(model_name)
+
+```{r}
+
+plot(salmon_model)
+
+# The residuals appear normally distributed
+
+# Points 15, 24, 25, and 28 appear to be outliers
+
+# Use the code below to view all four diagnostic plots at once, and have them appear in a knitted document. 
+
+par(mfrow = c(2,2))
+plot(salmon_model)
+
+```
+
+# 7 Explore model fit and significance
+
+Use summary(model_name) to see the detailed model information, including model fit information (e.g. R2 and coefficient standard errors) and statistics.
+
+See the lecture materials to interpret each component. Answer the following:
+• Does year significantly predict salmon imports?
+• What does the R2 value actually mean in words?
+• What proportion of the variance in salmon imports is NOT explained by year?
+
+```{r}
+
+summary(salmon_model) 
+
+# Year significantly predicts salmon imports (p < 0.001)
+
+# The R-squared value means that 94.8% of variance in salmon imports is explained by year. 
+
+# 5.2% of the variance in salmon imports in not explained by year. 
+
+```
 
 ```{r}
 
