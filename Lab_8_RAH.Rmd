@@ -59,13 +59,7 @@ salmon_model
 
 #6 Model diagnostics
 
-Use plot(model_name) to view model diagnostics in the ‘Plots’ tab (press Enter in the Console to contine to subsequent diagnostic plots). Explore the diagnostic plots to answer the following:
-• Do residuals appear normally distributed?
-• Any concerns about heteroscedasticity or outliers?
-To view all four diagnostic plots at once (and have them appear in your knitted document), you can use the
-following:
-par(mfrow = c(2,2))
-plot(model_name)
+Use plot(model_name) to view model diagnostics in the ‘Plots’ tab (press Enter in the Console to contine to subsequent diagnostic plots). 
 
 ```{r}
 
@@ -86,11 +80,6 @@ plot(salmon_model)
 
 Use summary(model_name) to see the detailed model information, including model fit information (e.g. R2 and coefficient standard errors) and statistics.
 
-See the lecture materials to interpret each component. Answer the following:
-• Does year significantly predict salmon imports?
-• What does the R2 value actually mean in words?
-• What proportion of the variance in salmon imports is NOT explained by year?
-
 ```{r}
 
 summary(salmon_model) 
@@ -103,9 +92,73 @@ summary(salmon_model)
 
 ```
 
+# 8 Prepare a final graph of the linear regression model with a 95% confidence interval
+
 ```{r}
 
+salmon_final_graph <- ggplot(salmon, aes(x = year, y = salmon_fresh)) +
+geom_point() +
+geom_smooth(method = lm, se = TRUE, size = 0.5, color = "gray20") +
+theme_bw() +
+scale_x_continuous(expand = c(0,0), limits = c(1990, 2017)) +
+labs(x = "Year", y = "U.S. Annual Fresh Salmon Imports\n(1,000 pounds)")
+
+salmon_final_graph
+
+
+# geom_smooth() adds confidence bands 
+
+```
+
+# Fig. 1 Total U.S. fresh salmon imports as a function of year between 1990-2017. Year predicted a signficant proportion of variance in salmon imports (R-squared= 0.948, F(1,26) = 471.9, p<0.001). 
+
+#9 Make predicitons using the model
+
+Let’s say we want to use our model to make predictions for U.S. fresh salmon imports in years 2022, 2024, 2026 and 2028.
+
+
+```{r}
+
+# Create a new data frame called ‘new_years’ containing the sequence of years that we want to make predictions for. The column name we create is the same as the variable name ‘year’ that the model uses.
+
+new_years <- data.frame(year = c(2022, 2024, 2026, 2028))
+
+# Enter the new_years data frame into the predict() function. Include interval = “confidence” to report the lower and upper bounds of the 95% CI for model fit at each year.
+
+future_predict <- predict(salmon_model, newdata = new_years, interval = "confidence")
+
+future_predict
+
+# The prediction outcomes are in the fit column. 
+# Bind the prediction outcomes with the new_years data frame to create a useful table of predicted imports with lower and upper limits. 
+
+predictions <- data.frame(new_years, future_predict)
+
+predictions
 
 
 ```
+
+# 10 Find Pearson’s r (correlation)
+
+Use the cor.test() function to find Pearson’s r for the linear relationship described between year and salmon imports.
+
+```{r}
+
+# Explore the correlation between year and salmon imports
+
+salmon_correlation <- cor.test(salmon$year, salmon$salmon_fresh)
+
+salmon_correlation
+
+# There is a significant and strong positive correlation between year and salmon imports. 
+
+```
+
+# Concluding statement about the relationship
+
+Year signficantly predicts U.S. total salmon imports (b = 7550, t(26)= 21.7, p<0.001) with a strong positive correlation between the two (Pearson's r = 0.974). The overal model (imports = - 14982940 + 7550(year); in 1,000 pounds) explains a signficant amount of variance in salmon imports (F(1,26) = 471.9, p<0.001, R2= 0.95). 
+
+
+
 
